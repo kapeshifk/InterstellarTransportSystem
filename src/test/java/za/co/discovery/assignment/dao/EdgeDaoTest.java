@@ -107,17 +107,17 @@ public class EdgeDaoTest {
 
     @Test
     public void testSelectUnique() {
-        //Set up fixture
+        //Set
         Session session = sessionFactory.getCurrentSession();
         Edge edge = new Edge(8, "5", "UNIQUE A", "UNIQUE B", 0.5f);
         Edge expectedEdge = new Edge(9, "7", "UNIQUE C", "UNIQUE D", 0.7f);
         session.save(edge);
         session.save(expectedEdge);
 
-        //Exercise SUT
+        //Test
         Edge persistedEdge = edgeDao.selectUnique(expectedEdge.getRecordId());
 
-        //Verify Behaviour
+        //Verify
         assertThat(persistedEdge, sameBeanAs(expectedEdge));
         //Rollback for testing purpose
         session.getTransaction().rollback();
@@ -157,10 +157,10 @@ public class EdgeDaoTest {
         expectedEdges.add(e2);
 
         //Test
-        List<Edge> actualEdges = edgeDao.selectAll();
+        List<Edge> persistedEdge = edgeDao.selectAll();
 
         //Verify
-        assertThat(actualEdges, sameBeanAs(expectedEdges));
+        assertThat(persistedEdge, sameBeanAs(expectedEdges));
         //Rollback for testing purpose
         session.getTransaction().rollback();
     }

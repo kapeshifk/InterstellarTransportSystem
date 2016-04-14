@@ -42,6 +42,18 @@ public class ShortestPathService {
         }
     }
 
+    public void initializePlanets(Graph graph) {
+        this.vertices = new ArrayList<>(graph.getVertexes());
+        if(graph.isTrafficAllowed()){
+            graph.processTraffics();
+        }
+        if(graph.isUndirectedGraph()){
+            this.edges = new ArrayList<>(graph.getUndirectedEdges());
+        } else{
+            this.edges = new ArrayList<>(graph.getEdges());
+        }
+    }
+
     public void run(Vertex source) {
         distance = new HashMap<>();
         predecessors = new HashMap<>();
@@ -97,7 +109,11 @@ public class ShortestPathService {
                 return v;
             }
         }
-        return null;
+        Vertex islandVertex = new Vertex();
+        islandVertex.setVertexId(str);
+        islandVertex.setName("Island "+str);
+        System.out.println("ISLAND VERTEX "+str);
+        return islandVertex;
     }
 
     private boolean isVisited(Vertex vertex) {
@@ -114,6 +130,9 @@ public class ShortestPathService {
     }
 
     private float getDistance(Vertex source, Vertex target) {
+        System.out.println("THE SIZE OF EDGES "+edges.size());
+        System.out.println("SOURCE "+source);
+        System.out.println("DESTINATION "+target);
         for (Edge edge : edges) {
             if (edge.getSource().equals(source.getVertexId()) && edge.getDestination().equals(target.getVertexId())) {
                 return edge.getDistance() + edge.getTimeDelay();

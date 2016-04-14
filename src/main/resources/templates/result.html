@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
-
-    <title>
-</title>
+    <title>Interstellar Transport System</title>
 
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
@@ -11,8 +9,8 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-    <h2>Welcome</h2>
-
+    <h3>Result</h3>
+    <p th:text="'The shortest path from planet ' + ${shortest.vertexName}+ ' to '+ ${shortest.selectedVertexName} + ' is '+ ${shortest.thePath}"/>
 </div>
 
 </body>

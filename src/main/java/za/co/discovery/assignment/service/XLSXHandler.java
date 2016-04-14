@@ -82,6 +82,7 @@ public class XLSXHandler {
             XSSFSheet firstSheet = workbook.getSheetAt(1);
             Iterator<Row> iterator = firstSheet.iterator();
 
+            int recordId = 1;
             while (iterator.hasNext()) {
                 Row nextRow = iterator.next();
                 // skip header
@@ -90,26 +91,28 @@ public class XLSXHandler {
                 }
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
                 Edge edge = new Edge();
-
+                edge.setRecordId(recordId);
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next();
                     int columnIndex = cell.getColumnIndex();
                     switch (columnIndex + 1) {
                         case 1:
-                            edge.setEdgeId((String) getCellValue(cell));
+                            edge.setEdgeId(String.valueOf((int) cell.getNumericCellValue()));
                             break;
                         case 2:
-                            edge.setSource((String) getCellValue(cell));
+                            edge.setSource(cell.getStringCellValue());
                             break;
                         case 3:
-                            edge.setDestination((String) getCellValue(cell));
+                            edge.setDestination(cell.getStringCellValue());
                             break;
                         case 4:
-                            edge.setDistance((float) getCellValue(cell));
+                            edge.setDistance((float) cell.getNumericCellValue());
                             break;
                     }
                 }
+
                 edges.add(edge);
+                recordId = recordId + 1;
             }
 
             workbook.close();
@@ -143,7 +146,7 @@ public class XLSXHandler {
                     int columnIndex = cell.getColumnIndex();
                     switch (columnIndex + 1) {
                         case 1:
-                            traffic.setRouteId((String) getCellValue(cell));
+                            traffic.setRouteId(String.valueOf((int) cell.getNumericCellValue()));
                             break;
                         case 2:
                             traffic.setSource((String) getCellValue(cell));
@@ -152,7 +155,7 @@ public class XLSXHandler {
                             traffic.setDestination((String) getCellValue(cell));
                             break;
                         case 4:
-                            traffic.setDelay((float) getCellValue(cell));
+                            traffic.setDelay((float) cell.getNumericCellValue());
                             break;
                     }
                 }

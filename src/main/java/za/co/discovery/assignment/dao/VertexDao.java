@@ -54,11 +54,19 @@ public class VertexDao {
         return (Vertex) criteria.uniqueResult();
     }
 
+    public Vertex selectUniqueByName(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Vertex.class);
+        criteria.add(Restrictions.eq("name", name));
+
+        return (Vertex) criteria.uniqueResult();
+    }
+
     public List<Vertex> selectAll() {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Vertex.class);
-        List<Vertex> edges = (List<Vertex>) criteria.list();
+        List<Vertex> vertices = (List<Vertex>) criteria.list();
 
-        return edges;
+        return vertices;
     }
 }

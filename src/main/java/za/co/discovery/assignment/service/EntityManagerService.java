@@ -11,6 +11,9 @@ import za.co.discovery.assignment.entity.Vertex;
 import za.co.discovery.assignment.helper.Graph;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +21,7 @@ import java.util.List;
  */
 @Service
 public class EntityManagerService {
-    private static final String EXCEL_FILENAME = "interstellar.xlsx";
+    private static final String EXCEL_FILENAME = "/interstellar.xlsx";
     private VertexDao vertexDao;
     private EdgeDao edgeDao;
     private TrafficDao trafficDao;
@@ -31,9 +34,17 @@ public class EntityManagerService {
     }
 
     public void persistGraph() {
-        ClassLoader loader = getClass().getClassLoader();
-        File file = new File(loader.getResource(EXCEL_FILENAME).getFile());
+        URL resource = getClass().getResource(EXCEL_FILENAME);
+        File file1;
+        try {
+            file1 = new File(resource.toURI());
+            persistGraph(file1);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void persistGraph(File file) {
         XLSXHandler handler = new XLSXHandler(file);
 
         List<Vertex> vertices = handler.readVertexes();
@@ -64,5 +75,44 @@ public class EntityManagerService {
         Graph graph = new Graph(vertices, edges, traffics);
 
         return graph;
+    }
+
+    public Vertex saveVertex(Vertex vertex){
+        vertexDao.save(vertex);
+        return vertex;
+    }
+
+    public Vertex findVertex(String vertexId){
+        return vertexDao.selectUnique(vertexId);
+    }
+
+    public Vertex updateVertex(Vertex vertex){
+        vertexDao.update(vertex);
+        return vertex;
+    }
+
+    public boolean deleteVertex(String vertexId){
+        vertexDao.delete(vertexId);
+        return true;
+    }
+
+    public ArrayList getAllVertices(){
+     return (ArrayList) vertexDao.selectAll();
+    }
+
+    public String getVertexName(String vertexId){
+        return vertexDao.selectUnique(vertexId).getName();
+    }
+
+    public String getVertexId(String name){
+        return vertexDao.selectUniqueByName(name).getVertexId();
+    }
+
+    public Vertex getVertexByName(String name){
+        return vertexDao.selectUniqueByName(name);
+    }
+
+    public Vertex getVertexById(String vertexId){
+        return vertexDao.selectUnique(vertexId);
     }
 }

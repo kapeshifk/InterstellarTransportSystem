@@ -83,7 +83,7 @@ public class VertexDaoTest {
     }
 
     @Test
-    public void delete() throws Exception {
+    public void testDelete() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex v1 = new Vertex("A", "Mars");
@@ -106,13 +106,42 @@ public class VertexDaoTest {
     }
 
     @Test
-    public void selectUnique() throws Exception {
+    public void testSelectUnique() throws Exception {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Vertex v1 = new Vertex("A", "Mars");
+        Vertex expected = new Vertex("C", "Terre");
+        session.save(v1);
+        session.save(expected);
 
+        //Test
+        Vertex persistedVertex = vertexDao.selectUnique(expected.getVertexId());
+
+        //Verify
+        assertThat(persistedVertex, sameBeanAs(expected));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
     }
 
     @Test
-    public void selectAll() throws Exception {
+    public void testSelectAll() throws Exception {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Vertex v1 = new Vertex("A", "Jupiter");
+        Vertex v2 = new Vertex("F", "Pluto");
+        session.save(v1);
+        session.save(v2);
+        List<Vertex> expectedVertexes = new ArrayList<>();
+        expectedVertexes.add(v1);
+        expectedVertexes.add(v2);
 
+        //Test
+        List<Vertex> persistedVertexes = vertexDao.selectAll();
+
+        //Verify
+        assertThat(persistedVertexes, sameBeanAs(expectedVertexes));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
     }
 
 }

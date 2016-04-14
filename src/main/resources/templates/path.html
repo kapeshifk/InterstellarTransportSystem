@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="en">
 
-    <title>
-</title>
+    <title>Spring Framework Test</title>
 
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
@@ -11,8 +10,16 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-    <h2>Welcome</h2>
+    <h2>Start</h2>
 
+
+    <div>
+        <h2 th:text="${a}">Source</h2>
+
+        <select id="">
+            <option th:each="v : ${destination}" th:value="${v.vertexId}" th:text="${v.name}"></option>
+        </select>
+    </div>
 </div>
 
 </body>
