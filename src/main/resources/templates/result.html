@@ -9,8 +9,8 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-    <h3>Result</h3>
-    <p th:text="'The shortest path from planet ' + ${shortest.vertexName}+ ' to '+ ${shortest.selectedVertexName} + ' is '+ ${shortest.thePath}"/>
+    <h3 class="bg-primary">Result</h3>
+    <p class="lead" th:text="'The shortest path from planet ' + ${shortest.vertexName}+ ' to '+ ${shortest.selectedVertexName} + ' is '+ ${shortest.thePath}"/>
 </div>
 
 </body>

@@ -61,7 +61,7 @@ public class ShortestPathRepository {
         LinkedList<Vertex> paths = sp.getPath(destination);
         if(paths!=null){
             for (Vertex v : paths) {
-                path.append(v.getName());
+                path.append(v.getName()+" ("+v.getVertexId()+")");
                 path.append("\t");
             }
         }

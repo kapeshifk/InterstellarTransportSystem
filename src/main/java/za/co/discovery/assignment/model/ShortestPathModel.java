@@ -12,6 +12,8 @@ public class ShortestPathModel implements Serializable {
     private String vertexId;
     private String vertexName;
     private String thePath;
+    private String sourceVertex;
+    private String destinationVertex;
 
     public String getSelectedVertex() {
         return selectedVertex;
@@ -52,4 +54,21 @@ public class ShortestPathModel implements Serializable {
     public void setSelectedVertexName(String selectedVertexName) {
         this.selectedVertexName = selectedVertexName;
     }
+
+    public String getSourceVertex() {
+        return sourceVertex;
+    }
+
+    public void setSourceVertex(String sourceVertex) {
+        this.sourceVertex = sourceVertex;
+    }
+
+    public String getDestinationVertex() {
+        return destinationVertex;
+    }
+
+    public void setDestinationVertex(String destinationVertex) {
+        this.destinationVertex = destinationVertex;
+    }
+
 }

@@ -64,6 +64,7 @@ public class Graph {
                 for (Edge edge : edges) {
                     if (checkObjectsEqual(edge.getEdgeId(), traffic.getRouteId())) {
                         //check source and destination here
+                        if(checkObjectsEqual(edge.getSource(), traffic.getSource()) && checkObjectsEqual(edge.getDestination(), traffic.getDestination()))
                         edge.setTimeDelay(edge.getDistance() + traffic.getDelay());
                     }
                 }

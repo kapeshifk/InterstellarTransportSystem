@@ -82,10 +82,6 @@ public class EntityManagerService {
         return vertex;
     }
 
-    public Vertex findVertex(String vertexId){
-        return vertexDao.selectUnique(vertexId);
-    }
-
     public Vertex updateVertex(Vertex vertex){
         vertexDao.update(vertex);
         return vertex;
@@ -100,12 +96,32 @@ public class EntityManagerService {
      return (ArrayList) vertexDao.selectAll();
     }
 
-    public String getVertexName(String vertexId){
-        return vertexDao.selectUnique(vertexId).getName();
+    public boolean vertexExist(String vertexId){
+        Vertex vertex =  vertexDao.selectUnique(vertexId);
+        if(vertex == null){
+            return false;
+        } else{
+            return true;
+        }
     }
 
-    public String getVertexId(String name){
-        return vertexDao.selectUniqueByName(name).getVertexId();
+    public Edge saveEdge(Edge edge){
+        edgeDao.save(edge);
+        return edge;
+    }
+
+    public Edge updateEdge(Edge edge){
+        edgeDao.update(edge);
+        return edge;
+    }
+
+    public boolean deleteEdge(long recordId){
+        edgeDao.delete(recordId);
+        return true;
+    }
+
+    public ArrayList getAllEdges(){
+        return (ArrayList) edgeDao.selectAll();
     }
 
     public Vertex getVertexByName(String name){
@@ -114,5 +130,22 @@ public class EntityManagerService {
 
     public Vertex getVertexById(String vertexId){
         return vertexDao.selectUnique(vertexId);
+    }
+
+    public Edge getEdgeById(long recordId){
+        return edgeDao.selectUnique(recordId);
+    }
+
+    public long getMaxRecordId(){
+        return edgeDao.selectMaxRecordId();
+    }
+
+    public boolean edgeExist(Edge edge){
+        List<Edge> edges =  edgeDao.edgeExists(edge);
+        if(edges.isEmpty()){
+            return false;
+        } else{
+            return true;
+        }
     }
 }

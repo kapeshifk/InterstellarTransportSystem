@@ -21,7 +21,7 @@
             </tr>
             <tr th:each="vertex : ${vertices}">
                 <td th:text="${vertex.vertexId}"><a href="/vertices/${vertex.vertexId}">Id</a></td>
-                <td th:text="${vertex.name}">Route Name</td>
+                <td th:text="${vertex.name}">Planet Name</td>
                 <td><a th:href="${'/vertex/' + vertex.vertexId}">View</a></td>
                 <td><a th:href="${'/vertex/edit/' + vertex.vertexId}">Edit</a></td>
                 <td><a th:href="${'/vertex/delete/' + vertex.vertexId}">Delete</a></td>

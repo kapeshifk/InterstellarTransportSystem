@@ -5,7 +5,7 @@ Assignment task for an interstellar transport system used by Earth inhabitants i
 ## Continuous Integration
 [![Build Status](https://travis-ci.org/nieldw/parental-control-service.svg?branch=master)](https://travis-ci.org/nieldw/parental-control-service)
 
-Continuous Integration is set up using [Travis CI](https://travis-ci.org).
+Continuous Integration is set up using [Travis CI](https://travis-ci.org/kapeshifk/InterstellarTransportSystem).
 
 ## Installation
 This project only requires JDK 8. Install on linux using this command:

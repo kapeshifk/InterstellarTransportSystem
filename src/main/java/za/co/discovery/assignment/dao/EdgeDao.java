@@ -4,6 +4,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,25 @@ public class EdgeDao {
         criteria.add(Restrictions.eq("recordId", recordId));
 
         return (Edge) criteria.uniqueResult();
+    }
+
+    public long selectMaxRecordId() {
+        long maxId = (Long) sessionFactory.getCurrentSession()
+                .createCriteria(Edge.class)
+                .setProjection(Projections.max("recordId")).uniqueResult();
+
+        return maxId;
+    }
+
+    public List<Edge> edgeExists(Edge edge) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Edge.class);
+        criteria.add(Restrictions.ne("recordId", edge.getRecordId()));
+        criteria.add(Restrictions.eq("source", edge.getSource()));
+        criteria.add(Restrictions.eq("destination", edge.getDestination()));
+        List<Edge> edges = (List<Edge>) criteria.list();
+
+        return edges;
     }
 
     public List<Edge> selectAllByRecordId(long recordId) {

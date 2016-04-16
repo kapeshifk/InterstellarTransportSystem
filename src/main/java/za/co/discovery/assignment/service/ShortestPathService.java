@@ -112,7 +112,6 @@ public class ShortestPathService {
         Vertex islandVertex = new Vertex();
         islandVertex.setVertexId(str);
         islandVertex.setName("Island "+str);
-        System.out.println("ISLAND VERTEX "+str);
         return islandVertex;
     }
 
@@ -130,9 +129,6 @@ public class ShortestPathService {
     }
 
     private float getDistance(Vertex source, Vertex target) {
-        System.out.println("THE SIZE OF EDGES "+edges.size());
-        System.out.println("SOURCE "+source);
-        System.out.println("DESTINATION "+target);
         for (Edge edge : edges) {
             if (edge.getSource().equals(source.getVertexId()) && edge.getDestination().equals(target.getVertexId())) {
                 return edge.getDistance() + edge.getTimeDelay();

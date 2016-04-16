@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 public class InterstellarTransportSystemApplication {
 
     public static void main(String[] args) {
-        System.out.println("=== Interstellar Transport System ===");
         SpringApplication.run(InterstellarTransportSystemApplication.class, args);
     }
 

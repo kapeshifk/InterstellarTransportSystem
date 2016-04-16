@@ -58,7 +58,7 @@ public class EntityManagerServiceTest {
 
     @Test
     public void testPersistGraph() throws Exception {
-        /*Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.getCurrentSession();
         Vertex vertex1 = new Vertex("A", "Earth");
         Vertex vertex2 = new Vertex("B", "Moon");
         Vertex vertex3 = new Vertex("C", "Jupiter");
@@ -110,7 +110,7 @@ public class EntityManagerServiceTest {
         assertThat(expectedTraffics, sameBeanAs(readTraffics));
 
         //Rollback for testing purpose
-        session.getTransaction().rollback();*/
+        session.getTransaction().rollback();
     }
 
     @Test
