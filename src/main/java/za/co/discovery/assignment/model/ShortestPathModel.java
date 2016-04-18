@@ -14,6 +14,8 @@ public class ShortestPathModel implements Serializable {
     private String thePath;
     private String sourceVertex;
     private String destinationVertex;
+    private boolean undirectedGraph;
+    private boolean trafficAllowed;
 
     public String getSelectedVertex() {
         return selectedVertex;
@@ -71,4 +73,19 @@ public class ShortestPathModel implements Serializable {
         this.destinationVertex = destinationVertex;
     }
 
+    public boolean isUndirectedGraph() {
+        return undirectedGraph;
+    }
+
+    public void setUndirectedGraph(boolean undirectedGraph) {
+        this.undirectedGraph = undirectedGraph;
+    }
+
+    public boolean isTrafficAllowed() {
+        return trafficAllowed;
+    }
+
+    public void setTrafficAllowed(boolean trafficAllowed) {
+        this.trafficAllowed = trafficAllowed;
+    }
 }

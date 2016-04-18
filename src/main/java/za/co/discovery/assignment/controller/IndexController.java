@@ -15,7 +15,7 @@ public class IndexController implements ErrorController {
 
     @RequestMapping(value = PATH)
     public String error(Model model) {
-        String message = "Failed to load the page. Please restart.";
+        String message = "Failed to load the page. Please restart again.";
         model.addAttribute("validationMessage", message);
         return "validation";
     }

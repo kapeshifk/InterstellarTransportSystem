@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import za.co.discovery.assignment.entity.Edge;
+import za.co.discovery.assignment.entity.Traffic;
 import za.co.discovery.assignment.entity.Vertex;
 import za.co.discovery.assignment.helper.Graph;
+import za.co.discovery.assignment.helper.ValidationCodes;
 import za.co.discovery.assignment.model.ShortestPathModel;
 import za.co.discovery.assignment.service.EntityManagerService;
 import za.co.discovery.assignment.service.ShortestPathService;
@@ -22,6 +24,7 @@ public class RootController {
 
     private EntityManagerService entityManagerService;
     private ShortestPathService shortestPathService;
+    private static final String PATH_NOT_AVAILABLE = "NOT AVAILABLE!";
 
     @Autowired
     public RootController(EntityManagerService entityManagerService, ShortestPathService shortestPathService) {
@@ -77,47 +80,14 @@ public class RootController {
         entityManagerService.deleteVertex(vertexId);
         return "redirect:/vertices";
     }
+
+    public void buildVertexValidation(String vertexId, Model model) {
+        String vertexName = entityManagerService.getVertexById(vertexId) == null ? "" : entityManagerService.getVertexById(vertexId).getName();
+        String message = "Planet " + vertexId + " already exists as " + vertexName;
+        model.addAttribute("validationMessage", message);
+    }
+
     /*Planets Mapping End*/
-
-    /*Shortest Path Mapping Start*/
-
-    @RequestMapping(value = "/shortest", method = RequestMethod.GET)
-    public String shortestForm(Model model) {
-        ShortestPathModel pathModel = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
-        Vertex origin = (Vertex) allVertices.get(0);
-        pathModel.setVertexName(origin.getName());
-        model.addAttribute("shortest", pathModel);
-        model.addAttribute("pathList", allVertices);
-        return "shortest";
-    }
-
-    @RequestMapping(value = "/shortest", method = RequestMethod.POST)
-    public String shortestSubmit(@ModelAttribute ShortestPathModel pathModel, Model model) {
-
-        StringBuilder path = new StringBuilder();
-        Graph graph = entityManagerService.selectGraph();
-        shortestPathService.initializePlanets(graph);
-        Vertex destination = entityManagerService.getVertexById(pathModel.getSelectedVertex());
-        Vertex source = entityManagerService.getVertexByName(pathModel.getVertexName());
-        //
-        shortestPathService.run(source);
-        LinkedList<Vertex> paths = shortestPathService.getPath(destination);
-        if (paths != null) {
-            for (Vertex v : paths) {
-                path.append(v.getName() + " (" + v.getVertexId() + ")");
-                path.append("\t\t");
-            }
-        } else {
-            path.append("NOT AVAILABLE!");
-        }
-        pathModel.setThePath(path.toString());
-        pathModel.setSelectedVertexName(destination.getName());
-        model.addAttribute("shortest", pathModel);
-        return "result";
-    }
-
-    /*Shortest Path Mapping End*/
 
     /*Routes Mapping Start*/
 
@@ -152,13 +122,17 @@ public class RootController {
 
     @RequestMapping(value = "edge", method = RequestMethod.POST)
     public String saveEdge(Edge edge, @ModelAttribute ShortestPathModel pathModel, Model model) {
-        int id = (int) entityManagerService.getMaxRecordId() + 1;
+        int id = (int) entityManagerService.getEdgeMaxRecordId() + 1;
         edge.setRecordId(id);
         edge.setEdgeId(String.valueOf(id));
         edge.setSource(pathModel.getSourceVertex());
         edge.setDestination(pathModel.getDestinationVertex());
-        if (entityManagerService.edgeExist(edge)) {
-            buildEdgeValidation(pathModel, model);
+        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+            buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_TO_SELF.toString());
+            return "validation";
+        }
+        if (entityManagerService.edgeExists(edge)) {
+            buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_EXISTS.toString());
             return "validation";
         }
         entityManagerService.saveEdge(edge);
@@ -182,27 +156,187 @@ public class RootController {
     public String updateEdge(Edge edge, @ModelAttribute ShortestPathModel pathModel, Model model) {
         edge.setSource(pathModel.getSourceVertex());
         edge.setDestination(pathModel.getDestinationVertex());
-        if (entityManagerService.edgeExist(edge)) {
-            buildEdgeValidation(pathModel, model);
+        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+            buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_TO_SELF.toString());
+            return "validation";
+        }
+        if (entityManagerService.edgeExists(edge)) {
+            buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_EXISTS.toString());
             return "validation";
         }
         entityManagerService.updateEdge(edge);
         return "redirect:/edge/" + edge.getRecordId();
     }
 
-    public void buildEdgeValidation(@ModelAttribute ShortestPathModel pathModel, Model model) {
-        String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
-        String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
-        String message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
-        model.addAttribute("validationMessage", message);
-    }
-
-    public void buildVertexValidation(String vertexId, Model model) {
-        String vertexName = entityManagerService.getVertexById(vertexId) == null ? "" : entityManagerService.getVertexById(vertexId).getName();
-        String message = "Planet " + vertexId + " already exists as " + vertexName;
+    public void buildEdgeValidation(@ModelAttribute ShortestPathModel pathModel, Model model, String code) {
+        String message = "";
+        ValidationCodes mode = ValidationCodes.fromString(code);
+        if (mode != null) {
+            switch (mode) {
+                case ROUTE_EXISTS:
+                    String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
+                    String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
+                    message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
+                    break;
+                case ROUTE_TO_SELF:
+                    message = "You cannot link a route to itself.";
+                    break;
+                default:
+                    message = "Failed to find the validation code. Please start again.";
+                    break;
+            }
+        }
+        //
         model.addAttribute("validationMessage", message);
     }
 
     /*Routes Mapping End*/
+
+    /*Traffics Mapping Start*/
+
+    @RequestMapping(value = "/traffics", method = RequestMethod.GET)
+    public String listTraffics(Model model) {
+        ArrayList allTraffics = entityManagerService.getAllTraffics();
+        model.addAttribute("traffics", allTraffics);
+        return "traffics";
+    }
+
+    @RequestMapping("traffic/{routeId}")
+    public String showTraffic(@PathVariable String routeId, Model model) {
+        model.addAttribute("traffic", entityManagerService.getTrafficById(routeId));
+        return "trafficshow";
+    }
+
+    @RequestMapping("traffic/delete/{routeId}")
+    public String deleteTraffic(@PathVariable String routeId) {
+        entityManagerService.deleteTraffic(routeId);
+        return "redirect:/traffics";
+    }
+
+    @RequestMapping(value = "traffic/new", method = RequestMethod.GET)
+    public String addTraffic(Model model) {
+        ShortestPathModel sh = new ShortestPathModel();
+        ArrayList allVertices = entityManagerService.getAllVertices();
+        model.addAttribute("traffic", new Traffic());
+        model.addAttribute("trafficModel", sh);
+        model.addAttribute("trafficList", allVertices);
+        return "trafficadd";
+    }
+
+    @RequestMapping(value = "traffic", method = RequestMethod.POST)
+    public String saveTraffic(Traffic traffic, @ModelAttribute ShortestPathModel pathModel, Model model) {
+        int id = (int) entityManagerService.getTrafficMaxRecordId() + 1;
+        traffic.setRouteId(String.valueOf(id));
+        traffic.setSource(pathModel.getSourceVertex());
+        traffic.setDestination(pathModel.getDestinationVertex());
+        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+            buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_TO_SELF.toString());
+            return "validation";
+        }
+        if (entityManagerService.trafficExists(traffic)) {
+            buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_EXISTS.toString());
+            return "validation";
+        }
+        entityManagerService.saveTraffic(traffic);
+        return "redirect:/traffic/" + traffic.getRouteId();
+    }
+
+    @RequestMapping(value = "traffic/edit/{routeId}", method = RequestMethod.GET)
+    public String editTraffic(@PathVariable String routeId, Model model) {
+        ShortestPathModel pathModel = new ShortestPathModel();
+        ArrayList allVertices = entityManagerService.getAllVertices();
+        Traffic trafficToEdit = entityManagerService.getTrafficById(routeId);
+        pathModel.setSourceVertex(trafficToEdit.getSource());
+        pathModel.setDestinationVertex(trafficToEdit.getDestination());
+        model.addAttribute("traffic", trafficToEdit);
+        model.addAttribute("trafficModel", pathModel);
+        model.addAttribute("trafficList", allVertices);
+        return "trafficupdate";
+    }
+
+    @RequestMapping(value = "trafficupdate", method = RequestMethod.POST)
+    public String updateTraffic(Traffic traffic, @ModelAttribute ShortestPathModel pathModel, Model model) {
+        traffic.setSource(pathModel.getSourceVertex());
+        traffic.setDestination(pathModel.getDestinationVertex());
+        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+            buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_TO_SELF.toString());
+            return "validation";
+        }
+        if (entityManagerService.trafficExists(traffic)) {
+            buildTrafficValidation(pathModel, model,ValidationCodes.TRAFFIC_EXISTS.toString());
+            return "validation";
+        }
+        entityManagerService.updateTraffic(traffic);
+        return "redirect:/traffic/" + traffic.getRouteId();
+    }
+
+    public void buildTrafficValidation(@ModelAttribute ShortestPathModel pathModel, Model model, String code) {
+        String message = "";
+        ValidationCodes mode = ValidationCodes.fromString(code);
+        if (mode != null) {
+            switch (mode) {
+                case TRAFFIC_EXISTS:
+                    String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
+                    String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
+                    message = "The traffic from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
+                    break;
+                case TRAFFIC_TO_SELF:
+                    message = "You cannot add traffic on the same route origin and destination";
+                    break;
+                default:
+                    message = "Failed to find the validation code. Please start again.";
+                    break;
+            }
+        }
+        //
+        model.addAttribute("validationMessage", message);
+    }
+    /*Traffics Mapping End*/
+
+    /*Shortest Path Mapping Start*/
+
+    @RequestMapping(value = "/shortest", method = RequestMethod.GET)
+    public String shortestForm(Model model) {
+        ShortestPathModel pathModel = new ShortestPathModel();
+        ArrayList allVertices = entityManagerService.getAllVertices();
+        Vertex origin = (Vertex) allVertices.get(0);
+        pathModel.setVertexName(origin.getName());
+        model.addAttribute("shortest", pathModel);
+        model.addAttribute("pathList", allVertices);
+        return "shortest";
+    }
+
+    @RequestMapping(value = "/shortest", method = RequestMethod.POST)
+    public String shortestSubmit(@ModelAttribute ShortestPathModel pathModel, Model model) {
+
+        StringBuilder path = new StringBuilder();
+        Graph graph = entityManagerService.selectGraph();
+        if (pathModel.isTrafficAllowed()) {
+            graph.setTrafficAllowed(true);
+        }
+        if (pathModel.isUndirectedGraph()) {
+            graph.setUndirectedGraph(true);
+        }
+        shortestPathService.initializePlanets(graph);
+        Vertex source = entityManagerService.getVertexByName(pathModel.getVertexName());
+        Vertex destination = entityManagerService.getVertexById(pathModel.getSelectedVertex());
+        //
+        shortestPathService.run(source);
+        LinkedList<Vertex> paths = shortestPathService.getPath(destination);
+        if (paths != null) {
+            for (Vertex v : paths) {
+                path.append(v.getName() + " (" + v.getVertexId() + ")");
+                path.append("\t");
+            }
+        } else {
+            path.append(PATH_NOT_AVAILABLE);
+        }
+        pathModel.setThePath(path.toString());
+        pathModel.setSelectedVertexName(destination.getName());
+        model.addAttribute("shortest", pathModel);
+        return "result";
+    }
+
+    /*Shortest Path Mapping End*/
 }
 

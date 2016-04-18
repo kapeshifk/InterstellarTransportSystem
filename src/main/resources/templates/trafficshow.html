@@ -10,31 +10,30 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-    <h2>Route Details</h2>
+    <h2>Traffic Details</h2>
     <div>
         <form class="form-horizontal">
-            <input type="hidden" th:field="*{recordId}"/>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Route Id:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static" th:text="${edge.edgeId}">Route Id</p></div>
+                    <p class="form-control-static" th:text="${traffic.routeId}">Route Id</p></div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Planet Origin:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static" th:text="${edge.source}">Planet Origin</p>
+                    <p class="form-control-static" th:text="${traffic.source}">Planet Origin</p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Planet Destination:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static" th:text="${edge.destination}">Planet Destination</p>
+                    <p class="form-control-static" th:text="${traffic.destination}">Planet Destination</p>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Distance(Light Years):</label>
+                <label class="col-sm-2 control-label">Traffic Delay (Light Years):</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static" th:text="${edge.distance}">Distance(Light Years)</p>
+                    <p class="form-control-static" th:text="${traffic.delay}">Traffic Delay (Light Years)</p>
                 </div>
             </div>
         </form>

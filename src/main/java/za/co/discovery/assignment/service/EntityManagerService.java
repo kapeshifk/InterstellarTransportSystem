@@ -96,6 +96,15 @@ public class EntityManagerService {
      return (ArrayList) vertexDao.selectAll();
     }
 
+    public Vertex getVertexByName(String name){
+        return vertexDao.selectUniqueByName(name);
+    }
+
+    public Vertex getVertexById(String vertexId){
+        return vertexDao.selectUnique(vertexId);
+    }
+
+
     public boolean vertexExist(String vertexId){
         Vertex vertex =  vertexDao.selectUnique(vertexId);
         if(vertex == null){
@@ -124,25 +133,53 @@ public class EntityManagerService {
         return (ArrayList) edgeDao.selectAll();
     }
 
-    public Vertex getVertexByName(String name){
-        return vertexDao.selectUniqueByName(name);
-    }
-
-    public Vertex getVertexById(String vertexId){
-        return vertexDao.selectUnique(vertexId);
-    }
-
     public Edge getEdgeById(long recordId){
         return edgeDao.selectUnique(recordId);
     }
 
-    public long getMaxRecordId(){
+    public long getEdgeMaxRecordId(){
         return edgeDao.selectMaxRecordId();
     }
 
-    public boolean edgeExist(Edge edge){
+    public boolean edgeExists(Edge edge){
         List<Edge> edges =  edgeDao.edgeExists(edge);
         if(edges.isEmpty()){
+            return false;
+        } else{
+            return true;
+        }
+    }
+
+    public Traffic saveTraffic(Traffic traffic){
+        trafficDao.save(traffic);
+        return traffic;
+    }
+
+    public Traffic updateTraffic(Traffic traffic){
+        trafficDao.update(traffic);
+        return traffic;
+    }
+
+    public boolean deleteTraffic(String routeId){
+        trafficDao.delete(routeId);
+        return true;
+    }
+
+    public ArrayList getAllTraffics(){
+        return (ArrayList) trafficDao.selectAll();
+    }
+
+    public Traffic getTrafficById(String routeId){
+        return trafficDao.selectUnique(routeId);
+    }
+
+    public long getTrafficMaxRecordId(){
+        return trafficDao.selectMaxRecordId();
+    }
+
+    public boolean trafficExists(Traffic traffic){
+        List<Traffic> traffics =  trafficDao.trafficExists(traffic);
+        if(traffics.isEmpty()){
             return false;
         } else{
             return true;
