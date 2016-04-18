@@ -9,7 +9,7 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
 
-    <h3 class="bg-primary">Result</h3>
+    <div class="well well-sm">Result</div>
     <p class="lead" th:text="'The shortest path from planet ' + ${shortest.vertexName}+ ' to '+ ${shortest.selectedVertexName} + ' is '+ ${shortest.thePath}"/>
 </div>
 

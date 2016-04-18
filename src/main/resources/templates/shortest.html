@@ -9,7 +9,7 @@
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
     <div>
         <h3>Find the shortest path from the source to a destination</h3>
-        <form class="form-horizontal" action="#" th:action="@{/shortest}" th:object="${shortest}" method="post">
+        <form class="form-horizontal" th:action="@{/shortest}" th:object="${shortest}" method="post">
             <input type="hidden" th:field="*{vertexId}" />
             <p>Source: <input type="text" th:field="*{vertexName}" class="form-control"/></p>
             <label for="paths">Destination:</label>

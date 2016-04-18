@@ -22,7 +22,7 @@
                 <select id="paths" th:field="*{edgeModel.sourceVertex}" size="20" class="form-control input-lg">
                     <option th:each="v : ${routeList}"
                             th:value="${v.vertexId}"
-                            th:text="${v.name}">
+                            th:text="${v.name}+' ('+${v.vertexId}+')'">
                     </option>
                 </select>
             </div>
@@ -30,7 +30,7 @@
                 <select id="paths1" th:field="*{edgeModel.destinationVertex}" size="20" class="form-control input-lg">
                     <option th:each="v : ${routeList}"
                             th:value="${v.vertexId}"
-                            th:text="${v.name}">
+                            th:text="${v.name}+' ('+${v.vertexId}+')'">
                     </option>
                 </select>
             </div>

@@ -105,7 +105,7 @@ public class RootController {
         LinkedList<Vertex> paths = shortestPathService.getPath(destination);
         if (paths != null) {
             for (Vertex v : paths) {
-                path.append(v.getName()+" ("+v.getVertexId()+")");
+                path.append(v.getName() + " (" + v.getVertexId() + ")");
                 path.append("\t\t");
             }
         } else {
@@ -191,19 +191,18 @@ public class RootController {
     }
 
     public void buildEdgeValidation(@ModelAttribute ShortestPathModel pathModel, Model model) {
-        String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
-        String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
+        String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
+        String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
         String message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
         model.addAttribute("validationMessage", message);
     }
 
     public void buildVertexValidation(String vertexId, Model model) {
-        String vertexName = entityManagerService.getVertexById(vertexId).getName();
+        String vertexName = entityManagerService.getVertexById(vertexId) == null ? "" : entityManagerService.getVertexById(vertexId).getName();
         String message = "Planet " + vertexId + " already exists as " + vertexName;
         model.addAttribute("validationMessage", message);
     }
 
     /*Routes Mapping End*/
-
 }
 
