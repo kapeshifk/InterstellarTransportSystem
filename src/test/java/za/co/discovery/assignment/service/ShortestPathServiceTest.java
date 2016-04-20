@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/14.
@@ -69,7 +69,8 @@ public class ShortestPathServiceTest {
         Graph graph = new Graph(vertices, edges, traffics);
         graph.setTrafficAllowed(true);
         graph.setUndirectedGraph(true);
-        ShortestPathService dijkstra = new ShortestPathService(graph);
+        ShortestPathService dijkstra = new ShortestPathService();
+        dijkstra.initializePlanets(graph);
         dijkstra.run(source);
         LinkedList<Vertex> paths = dijkstra.getPath(destination);
         if (paths != null) {

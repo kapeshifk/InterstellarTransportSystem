@@ -4,16 +4,8 @@ import org.springframework.stereotype.Service;
 import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Vertex;
 import za.co.discovery.assignment.helper.Graph;
-import za.co.discovery.assignment.model.ShortestPathModel;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/09.
@@ -25,7 +17,7 @@ public class ShortestPathService {
     private List<Edge> edges;
     private Set<Vertex> visitedVertices;
     private Set<Vertex> unvisitedVertices;
-    private Map<Vertex, Vertex> predecessors;
+    private Map<Vertex, Vertex> previousPaths;
     private Map<Vertex, Float> distance;
 
     public ShortestPathService() {
@@ -34,31 +26,31 @@ public class ShortestPathService {
     public ShortestPathService(Graph graph) {
         //initialize vertices and edges
         this.vertices = new ArrayList<>(graph.getVertexes());
-        if(graph.isTrafficAllowed()){
+        if (graph.isTrafficAllowed()) {
             graph.processTraffics();
         }
-        if(graph.isUndirectedGraph()){
+        if (graph.isUndirectedGraph()) {
             this.edges = new ArrayList<>(graph.getUndirectedEdges());
-        } else{
+        } else {
             this.edges = new ArrayList<>(graph.getEdges());
         }
     }
 
     public void initializePlanets(Graph graph) {
         this.vertices = new ArrayList<>(graph.getVertexes());
-        if(graph.isTrafficAllowed()){
+        if (graph.isTrafficAllowed()) {
             graph.processTraffics();
         }
-        if(graph.isUndirectedGraph()){
+        if (graph.isUndirectedGraph()) {
             this.edges = new ArrayList<>(graph.getUndirectedEdges());
-        } else{
+        } else {
             this.edges = new ArrayList<>(graph.getEdges());
         }
     }
 
     public void run(Vertex source) {
         distance = new HashMap<>();
-        predecessors = new HashMap<>();
+        previousPaths = new HashMap<>();
         visitedVertices = new HashSet<>();
         unvisitedVertices = new HashSet<>();
         distance.put(source, 0f);
@@ -67,7 +59,7 @@ public class ShortestPathService {
             Vertex currentVertex = getVertexWithLowestDistance(unvisitedVertices);
             visitedVertices.add(currentVertex);
             unvisitedVertices.remove(currentVertex);
-            findMinimalDistances(currentVertex);
+            evaluateNeighborsWithMinimalDistances(currentVertex);
         }
     }
 
@@ -83,12 +75,13 @@ public class ShortestPathService {
         return lowestVertex;
     }
 
-    private void findMinimalDistances(Vertex currentVertex) {
+    private void evaluateNeighborsWithMinimalDistances(Vertex currentVertex) {
         List<Vertex> adjacentVertices = getNeighbors(currentVertex);
         for (Vertex target : adjacentVertices) {
-            if (getShortestDistance(target) > getShortestDistance(currentVertex) + getDistance(currentVertex, target)) {
-                distance.put(target, getShortestDistance(currentVertex) + getDistance(currentVertex, target));
-                predecessors.put(target, currentVertex);
+            float alternateDistance = getShortestDistance(currentVertex) + getDistance(currentVertex, target);
+            if (alternateDistance < getShortestDistance(target)) {
+                distance.put(target, alternateDistance);
+                previousPaths.put(target, currentVertex);
                 unvisitedVertices.add(target);
             }
         }
@@ -113,7 +106,7 @@ public class ShortestPathService {
         }
         Vertex islandVertex = new Vertex();
         islandVertex.setVertexId(str);
-        islandVertex.setName("Island "+str);
+        islandVertex.setName("Island " + str);
         return islandVertex;
     }
 
@@ -143,12 +136,12 @@ public class ShortestPathService {
         LinkedList<Vertex> path = new LinkedList<>();
         Vertex step = target;
         // return null if path does not exist
-        if (predecessors.get(step) == null) {
+        if (previousPaths.get(step) == null) {
             return null;
         }
         path.add(step);
-        while (predecessors.get(step) != null) {
-            step = predecessors.get(step);
+        while (previousPaths.get(step) != null) {
+            step = previousPaths.get(step);
             path.add(step);
         }
         //Reverse for good ordering

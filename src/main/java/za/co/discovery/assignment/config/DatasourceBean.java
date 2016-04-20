@@ -23,11 +23,10 @@ public class DatasourceBean {
         dataSource.setUser("username");
         dataSource.setPassword("password");
 
-        try{
+        try {
             dataSource.getConnection();
-        }
-        catch (SQLException e) {
-            Logger.getLogger("discovery").log(Level.SEVERE, "Failed to connect to the database: "+e);
+        } catch (SQLException e) {
+            Logger.getLogger("discovery").log(Level.SEVERE, "Failed to connect to the database: " + e);
         }
 
         return dataSource;

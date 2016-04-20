@@ -2,10 +2,9 @@ package za.co.discovery.assignment.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.hibernate.SessionFactory;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

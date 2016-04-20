@@ -2,7 +2,7 @@ package za.co.discovery.assignment.helper;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/18.

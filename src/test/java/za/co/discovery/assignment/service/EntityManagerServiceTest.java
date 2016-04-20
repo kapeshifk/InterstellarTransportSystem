@@ -28,8 +28,6 @@ import java.util.List;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/13.
@@ -55,7 +53,7 @@ public class EntityManagerServiceTest {
         edgeDao = new EdgeDao(sessionFactory);
         trafficDao = new TrafficDao(sessionFactory);
         vertexDao = new VertexDao(sessionFactory);
-        entityManagerService = new EntityManagerService(vertexDao,edgeDao,trafficDao);
+        entityManagerService = new EntityManagerService(vertexDao, edgeDao, trafficDao);
     }
 
     @Test

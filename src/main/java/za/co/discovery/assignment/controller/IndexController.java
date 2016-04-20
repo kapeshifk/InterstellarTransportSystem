@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController implements ErrorController {
     private static final String PATH = "/error";
+
     @RequestMapping("/")
-    String index(){
+    String index() {
         return "index";
     }
 

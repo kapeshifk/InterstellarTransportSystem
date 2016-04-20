@@ -6,7 +6,6 @@ import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Traffic;
 import za.co.discovery.assignment.entity.Vertex;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

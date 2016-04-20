@@ -3,7 +3,10 @@ package za.co.discovery.assignment.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Traffic;
 import za.co.discovery.assignment.entity.Vertex;
@@ -127,7 +130,7 @@ public class RootController {
         edge.setEdgeId(String.valueOf(id));
         edge.setSource(pathModel.getSourceVertex());
         edge.setDestination(pathModel.getDestinationVertex());
-        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+        if (pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())) {
             buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_TO_SELF.toString());
             return "validation";
         }
@@ -156,7 +159,7 @@ public class RootController {
     public String updateEdge(Edge edge, @ModelAttribute ShortestPathModel pathModel, Model model) {
         edge.setSource(pathModel.getSourceVertex());
         edge.setDestination(pathModel.getDestinationVertex());
-        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+        if (pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())) {
             buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_TO_SELF.toString());
             return "validation";
         }
@@ -230,7 +233,7 @@ public class RootController {
         traffic.setRouteId(String.valueOf(id));
         traffic.setSource(pathModel.getSourceVertex());
         traffic.setDestination(pathModel.getDestinationVertex());
-        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+        if (pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())) {
             buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_TO_SELF.toString());
             return "validation";
         }
@@ -259,12 +262,12 @@ public class RootController {
     public String updateTraffic(Traffic traffic, @ModelAttribute ShortestPathModel pathModel, Model model) {
         traffic.setSource(pathModel.getSourceVertex());
         traffic.setDestination(pathModel.getDestinationVertex());
-        if(pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())){
+        if (pathModel.getSourceVertex().equals(pathModel.getDestinationVertex())) {
             buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_TO_SELF.toString());
             return "validation";
         }
         if (entityManagerService.trafficExists(traffic)) {
-            buildTrafficValidation(pathModel, model,ValidationCodes.TRAFFIC_EXISTS.toString());
+            buildTrafficValidation(pathModel, model, ValidationCodes.TRAFFIC_EXISTS.toString());
             return "validation";
         }
         entityManagerService.updateTraffic(traffic);

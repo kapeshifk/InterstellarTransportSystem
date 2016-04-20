@@ -1,9 +1,14 @@
 package za.co.discovery.assignment.controller;
 
 import org.junit.Before;
-import org.mockito.*;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Traffic;
 import za.co.discovery.assignment.entity.Vertex;
@@ -12,26 +17,19 @@ import za.co.discovery.assignment.model.ShortestPathModel;
 import za.co.discovery.assignment.service.EntityManagerService;
 import za.co.discovery.assignment.service.ShortestPathService;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
-
-import org.junit.Test;
-import org.mockito.Mock;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.ArgumentCaptor;
-
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/18.

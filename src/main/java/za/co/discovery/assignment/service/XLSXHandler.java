@@ -32,7 +32,7 @@ public class XLSXHandler {
         this.file = file;
     }
 
-    public List<Vertex> readVertexes(){
+    public List<Vertex> readVertexes() {
         List<Vertex> vertices = new ArrayList<>();
         try {
             FileInputStream inputStream = new FileInputStream(this.file);
@@ -68,7 +68,7 @@ public class XLSXHandler {
             workbook.close();
             inputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading vertices data: "+ex);
+            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading vertices data: " + ex);
         }
         return vertices;
     }
@@ -118,7 +118,7 @@ public class XLSXHandler {
             workbook.close();
             inputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading edges data: "+ex);
+            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading edges data: " + ex);
         }
         return edges;
     }
@@ -165,7 +165,7 @@ public class XLSXHandler {
             workbook.close();
             inputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading traffics data: "+ex);
+            Logger.getLogger("discovery").log(Level.SEVERE, "An Exception occurred while reading traffics data: " + ex);
         }
 
         return traffics;

@@ -21,15 +21,13 @@ import java.util.LinkedList;
 @Component
 public class ShortestPathRepository {
 
-    private EntityManagerService entityManagerService;
-    private Graph graph;
-
-    @Autowired
-    @Qualifier("transactionManager")
     protected PlatformTransactionManager platformTransactionManager;
+    private Graph graph;
+    private EntityManagerService entityManagerService;
 
     @Autowired
-    public ShortestPathRepository(EntityManagerService entityManagerService) {
+    public ShortestPathRepository(@Qualifier("transactionManager") PlatformTransactionManager platformTransactionManager, EntityManagerService entityManagerService) {
+        this.platformTransactionManager = platformTransactionManager;
         this.entityManagerService = entityManagerService;
     }
 
@@ -46,22 +44,22 @@ public class ShortestPathRepository {
         });
     }
 
-    public String getShortestPath(String name){
+    public String getShortestPath(String name) {
         StringBuilder path = new StringBuilder();
-        ShortestPathService sp =  new ShortestPathService(graph);
+        ShortestPathService sp = new ShortestPathService(graph);
         Vertex destination = entityManagerService.getVertexByName(name);
-        if(destination==null){
+        if (destination == null) {
             destination = entityManagerService.getVertexById(name);
-            if(destination == null){
+            if (destination == null) {
                 return "The Planet requested does not exist.";
             }
         }
         Vertex source = graph.getVertexes().get(0);
         sp.run(source);
         LinkedList<Vertex> paths = sp.getPath(destination);
-        if(paths!=null){
+        if (paths != null) {
             for (Vertex v : paths) {
-                path.append(v.getName()+" ("+v.getVertexId()+")");
+                path.append(v.getName() + " (" + v.getVertexId() + ")");
                 path.append("\t");
             }
         }

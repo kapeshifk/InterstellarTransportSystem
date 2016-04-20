@@ -1,6 +1,9 @@
 package za.co.discovery.assignment.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -8,7 +11,7 @@ import java.io.Serializable;
  */
 @Entity(name = "traffic")
 @Table
-public class Traffic implements Serializable{
+public class Traffic implements Serializable {
 
     @Id
     @Column

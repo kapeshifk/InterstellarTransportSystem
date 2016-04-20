@@ -4,7 +4,6 @@ import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Traffic;
 import za.co.discovery.assignment.entity.Vertex;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class Graph {
             for (Traffic traffic : traffics) {
                 for (Edge edge : edges) {
                     if (checkObjectsEqual(edge.getEdgeId(), traffic.getRouteId())) {
-                        if(checkObjectsEqual(edge.getSource(), traffic.getSource()) && checkObjectsEqual(edge.getDestination(), traffic.getDestination())){
+                        if (checkObjectsEqual(edge.getSource(), traffic.getSource()) && checkObjectsEqual(edge.getDestination(), traffic.getDestination())) {
                             edge.setTimeDelay(traffic.getDelay());
                         }
                     }

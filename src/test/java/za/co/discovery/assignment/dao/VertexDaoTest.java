@@ -20,7 +20,7 @@ import java.util.List;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 /**

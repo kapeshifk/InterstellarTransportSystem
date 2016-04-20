@@ -11,6 +11,7 @@ import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
+
 /**
  * Created by Kapeshi.Kongolo on 2016/04/13.
  */
