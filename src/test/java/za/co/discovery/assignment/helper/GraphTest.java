@@ -1,5 +1,6 @@
 package za.co.discovery.assignment.helper;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import za.co.discovery.assignment.entity.Edge;
@@ -69,7 +70,7 @@ public class GraphTest {
         assertThat(actualGraph, sameBeanAs(expectedGraph));
         assertThat(vertices, sameBeanAs(verticesExpected));
         assertThat(traffics, sameBeanAs(trafficsExpected));
-        assertEquals(actualTraffic, expectedTraffic);
+        assertThat(actualTraffic, sameBeanAs(expectedTraffic));
     }
 
     @Test

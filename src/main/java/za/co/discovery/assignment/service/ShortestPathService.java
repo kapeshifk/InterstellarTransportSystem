@@ -135,7 +135,7 @@ public class ShortestPathService {
     public LinkedList<Vertex> getPath(Vertex target) {
         LinkedList<Vertex> path = new LinkedList<>();
         Vertex step = target;
-        // return null if path does not exist
+
         if (previousPaths.get(step) == null) {
             return null;
         }
@@ -144,7 +144,7 @@ public class ShortestPathService {
             step = previousPaths.get(step);
             path.add(step);
         }
-        //Reverse for good ordering
+
         Collections.reverse(path);
         return path;
     }

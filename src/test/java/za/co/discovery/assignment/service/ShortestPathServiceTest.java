@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/14.
@@ -85,6 +87,6 @@ public class ShortestPathServiceTest {
 
         String actual = path.toString();
 
-        assertEquals(expectedPath, actual);
+        assertThat(expectedPath, sameBeanAs(actual));
     }
 }

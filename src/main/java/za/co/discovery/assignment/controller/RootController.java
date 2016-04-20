@@ -25,7 +25,8 @@ import java.util.List;
 @Controller
 public class RootController {
 
-    private static final String PATH_NOT_AVAILABLE = "NOT AVAILABLE!";
+    private static final String PATH_NOT_AVAILABLE = "Unavailable.";
+    private static final String PATH_NOT_NEEDED = "Not needed. You are already on planet ";
     private EntityManagerService entityManagerService;
     private ShortestPathService shortestPathService;
 
@@ -332,6 +333,8 @@ public class RootController {
                 path.append(v.getName() + " (" + v.getVertexId() + ")");
                 path.append("\t");
             }
+        } else if (source != null && destination != null && source.getVertexId().equals(destination.getVertexId())) {
+            path.append(PATH_NOT_NEEDED + source.getName());
         } else {
             path.append(PATH_NOT_AVAILABLE);
         }

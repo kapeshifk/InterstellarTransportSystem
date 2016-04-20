@@ -2,7 +2,8 @@ package za.co.discovery.assignment.helper;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/18.
@@ -10,10 +11,10 @@ import static org.junit.Assert.assertEquals;
 public class ValidationCodesTest {
     @Test
     public void verifyThatValidationCodesHandlingIsCorrect() throws Exception {
-        String code = ValidationCodes.ROUTE_EXISTS.toString();
+        ValidationCodes expectedCode = ValidationCodes.ROUTE_EXISTS;
         int codeId = ValidationCodes.TRAFFIC_EXISTS.getId();
-        ValidationCodes mode = ValidationCodes.fromString(code);
-        assertEquals(code, mode.toString());
-        assertEquals(3, codeId);
+        ValidationCodes actualMode = ValidationCodes.fromString("ROUTE EXISTS");
+        assertThat(expectedCode, sameBeanAs(actualMode));
+        assertThat(3, sameBeanAs(codeId));
     }
 }

@@ -34,7 +34,7 @@ public class ShortestPathEndpointTest {
     private ShortestPathEndpoint shortestPathEndpoint;
 
     @Test
-    public void getShortestPath() throws Exception {
+    public void verifyThatShortestPathSOAPEndPointIsCorrect() throws Exception {
         // Set Up Fixture
         GetShortestPathRequest shortestPathRequest = new GetShortestPathRequest();
         shortestPathRequest.setName("Moon");
