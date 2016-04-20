@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static org.junit.Assert.*;
 
 
 /**
@@ -40,7 +41,7 @@ public class VertexDaoTest {
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void verifyThatSaveVertexIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex vertex = new Vertex("A", "Earth");
@@ -54,12 +55,13 @@ public class VertexDaoTest {
 
         //Verify
         assertThat(persistedVertexes, sameBeanAs(expectedVertexes));
+        assertEquals("Earth", persistedVertexes.get(0).getName());
         //Rollback for testing purpose
         session.getTransaction().rollback();
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void verifyThatUpdateVertexIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex vertex = new Vertex("A", "Earth");
@@ -83,7 +85,7 @@ public class VertexDaoTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void verifyThatDeleteVertexIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex v1 = new Vertex("A", "Mars");
@@ -106,7 +108,7 @@ public class VertexDaoTest {
     }
 
     @Test
-    public void testSelectUnique() throws Exception {
+    public void verifyThatSelectUniqueVertexIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex v1 = new Vertex("A", "Mars");
@@ -115,16 +117,37 @@ public class VertexDaoTest {
         session.save(expected);
 
         //Test
-        Vertex persistedVertex = vertexDao.selectUnique(expected.getVertexId());
+        Vertex actualVertex = vertexDao.selectUnique(expected.getVertexId());
 
         //Verify
-        assertThat(persistedVertex, sameBeanAs(expected));
+        assertThat(actualVertex, sameBeanAs(expected));
         //Rollback for testing purpose
         session.getTransaction().rollback();
     }
 
     @Test
-    public void testSelectAll() throws Exception {
+    public void verifyThatSelectUniqueByNameVertexIsCorrect() throws Exception {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Vertex vertex1 = new Vertex("A", "Earth");
+        Vertex vertex2 = new Vertex("B", "Mars");
+        Vertex expected = new Vertex("C", "Moon");
+        session.save(vertex1);
+        session.save(vertex2);
+        session.save(expected);
+
+        //Test
+        Vertex persistedVertex = vertexDao.selectUniqueByName(expected.getName());
+
+        //Verify
+        assertThat(persistedVertex, sameBeanAs(expected));
+        assertThat(persistedVertex.getName(), sameBeanAs("Moon"));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
+    }
+
+    @Test
+    public void verifyThatSelectAllVertexIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Vertex v1 = new Vertex("A", "Jupiter");

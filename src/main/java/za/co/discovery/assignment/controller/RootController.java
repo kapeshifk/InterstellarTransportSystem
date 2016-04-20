@@ -13,8 +13,8 @@ import za.co.discovery.assignment.model.ShortestPathModel;
 import za.co.discovery.assignment.service.EntityManagerService;
 import za.co.discovery.assignment.service.ShortestPathService;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Kapeshi.Kongolo on 2016/04/09.
@@ -22,9 +22,9 @@ import java.util.LinkedList;
 @Controller
 public class RootController {
 
+    private static final String PATH_NOT_AVAILABLE = "NOT AVAILABLE!";
     private EntityManagerService entityManagerService;
     private ShortestPathService shortestPathService;
-    private static final String PATH_NOT_AVAILABLE = "NOT AVAILABLE!";
 
     @Autowired
     public RootController(EntityManagerService entityManagerService, ShortestPathService shortestPathService) {
@@ -36,7 +36,7 @@ public class RootController {
 
     @RequestMapping(value = "/vertices", method = RequestMethod.GET)
     public String listVertices(Model model) {
-        ArrayList allVertices = entityManagerService.getAllVertices();
+        List allVertices = entityManagerService.getAllVertices();
         model.addAttribute("vertices", allVertices);
         return "vertices";
     }
@@ -93,7 +93,7 @@ public class RootController {
 
     @RequestMapping(value = "/edges", method = RequestMethod.GET)
     public String listEdges(Model model) {
-        ArrayList allEdges = entityManagerService.getAllEdges();
+        List allEdges = entityManagerService.getAllEdges();
         model.addAttribute("edges", allEdges);
         return "edges";
     }
@@ -113,7 +113,7 @@ public class RootController {
     @RequestMapping(value = "edge/new", method = RequestMethod.GET)
     public String addEdge(Model model) {
         ShortestPathModel sh = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
+        List allVertices = entityManagerService.getAllVertices();
         model.addAttribute("edge", new Edge());
         model.addAttribute("edgeModel", sh);
         model.addAttribute("routeList", allVertices);
@@ -142,7 +142,7 @@ public class RootController {
     @RequestMapping(value = "edge/edit/{recordId}", method = RequestMethod.GET)
     public String editEdge(@PathVariable long recordId, Model model) {
         ShortestPathModel pathModel = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
+        List allVertices = entityManagerService.getAllVertices();
         Edge edgeToEdit = entityManagerService.getEdgeById(recordId);
         pathModel.setSourceVertex(edgeToEdit.getSource());
         pathModel.setDestinationVertex(edgeToEdit.getDestination());
@@ -160,6 +160,7 @@ public class RootController {
             buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_TO_SELF.toString());
             return "validation";
         }
+
         if (entityManagerService.edgeExists(edge)) {
             buildEdgeValidation(pathModel, model, ValidationCodes.ROUTE_EXISTS.toString());
             return "validation";
@@ -176,7 +177,7 @@ public class RootController {
                 case ROUTE_EXISTS:
                     String sourceName = entityManagerService.getVertexById(pathModel.getSourceVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getSourceVertex()).getName();
                     String sourceDestination = entityManagerService.getVertexById(pathModel.getDestinationVertex()) == null ? "" : entityManagerService.getVertexById(pathModel.getDestinationVertex()).getName();
-                    message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
+                    message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + "(" + pathModel.getDestinationVertex() + ") exists already.";
                     break;
                 case ROUTE_TO_SELF:
                     message = "You cannot link a route to itself.";
@@ -196,7 +197,7 @@ public class RootController {
 
     @RequestMapping(value = "/traffics", method = RequestMethod.GET)
     public String listTraffics(Model model) {
-        ArrayList allTraffics = entityManagerService.getAllTraffics();
+        List<Traffic> allTraffics = entityManagerService.getAllTraffics();
         model.addAttribute("traffics", allTraffics);
         return "traffics";
     }
@@ -216,7 +217,7 @@ public class RootController {
     @RequestMapping(value = "traffic/new", method = RequestMethod.GET)
     public String addTraffic(Model model) {
         ShortestPathModel sh = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
+        List allVertices = entityManagerService.getAllVertices();
         model.addAttribute("traffic", new Traffic());
         model.addAttribute("trafficModel", sh);
         model.addAttribute("trafficList", allVertices);
@@ -244,7 +245,7 @@ public class RootController {
     @RequestMapping(value = "traffic/edit/{routeId}", method = RequestMethod.GET)
     public String editTraffic(@PathVariable String routeId, Model model) {
         ShortestPathModel pathModel = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
+        List allVertices = entityManagerService.getAllVertices();
         Traffic trafficToEdit = entityManagerService.getTrafficById(routeId);
         pathModel.setSourceVertex(trafficToEdit.getSource());
         pathModel.setDestinationVertex(trafficToEdit.getDestination());
@@ -281,7 +282,7 @@ public class RootController {
                     message = "The traffic from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + " (" + pathModel.getDestinationVertex() + ") exists already.";
                     break;
                 case TRAFFIC_TO_SELF:
-                    message = "You cannot add traffic on the same route origin and destination";
+                    message = "You cannot add traffic on the same route origin and destination.";
                     break;
                 default:
                     message = "Failed to find the validation code. Please start again.";
@@ -298,8 +299,8 @@ public class RootController {
     @RequestMapping(value = "/shortest", method = RequestMethod.GET)
     public String shortestForm(Model model) {
         ShortestPathModel pathModel = new ShortestPathModel();
-        ArrayList allVertices = entityManagerService.getAllVertices();
-        Vertex origin = (Vertex) allVertices.get(0);
+        List<Vertex> allVertices = entityManagerService.getAllVertices();
+        Vertex origin = allVertices.get(0);
         pathModel.setVertexName(origin.getName());
         model.addAttribute("shortest", pathModel);
         model.addAttribute("pathList", allVertices);

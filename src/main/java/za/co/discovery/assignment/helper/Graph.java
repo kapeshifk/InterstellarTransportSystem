@@ -19,11 +19,6 @@ public class Graph {
     private boolean undirectedGraph;
     private boolean trafficAllowed;
 
-    public Graph(List<Vertex> vertexes, List<Edge> edges) {
-        this.vertexes = vertexes;
-        this.edges = edges;
-    }
-
     public Graph(List<Vertex> vertexes, List<Edge> edges, List<Traffic> traffics) {
         this.vertexes = vertexes;
         this.edges = edges;
@@ -101,10 +96,6 @@ public class Graph {
             return false;
         } else if (object instanceof String && otherObject instanceof String) {
             return ((String) object).equalsIgnoreCase((String) otherObject);
-        } else if (object instanceof BigDecimal && otherObject instanceof BigDecimal) {
-            return ((BigDecimal) object).compareTo((BigDecimal) otherObject) == 0;
-        } else if (object instanceof Float && otherObject instanceof Float) {
-            return ((Float) object).compareTo((Float) otherObject) == 0;
         } else {
             //Both objects are not null
             return object.equals(otherObject);

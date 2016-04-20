@@ -21,15 +21,6 @@ public enum ValidationCodes {
         this.label = label;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public String toString() {
-        return label;
-    }
-
     public static ValidationCodes fromString(final String str) {
         for (ValidationCodes e : ValidationCodes.values()) {
             if (e.toString().equalsIgnoreCase(str)) {
@@ -39,13 +30,13 @@ public enum ValidationCodes {
         return null;
     }
 
-    public static ValidationCodes fromId(final int id) {
-        for (ValidationCodes e : ValidationCodes.values()) {
-            if (e.id == id) {
-                return e;
-            }
-        }
-        return null;
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return label;
     }
 }
 

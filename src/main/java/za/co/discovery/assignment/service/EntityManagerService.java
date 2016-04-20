@@ -92,8 +92,8 @@ public class EntityManagerService {
         return true;
     }
 
-    public ArrayList getAllVertices(){
-     return (ArrayList) vertexDao.selectAll();
+    public List<Vertex> getAllVertices() {
+        return vertexDao.selectAll();
     }
 
     public Vertex getVertexByName(String name){
@@ -104,14 +104,9 @@ public class EntityManagerService {
         return vertexDao.selectUnique(vertexId);
     }
 
-
     public boolean vertexExist(String vertexId){
         Vertex vertex =  vertexDao.selectUnique(vertexId);
-        if(vertex == null){
-            return false;
-        } else{
-            return true;
-        }
+        return vertex != null;
     }
 
     public Edge saveEdge(Edge edge){
@@ -129,8 +124,8 @@ public class EntityManagerService {
         return true;
     }
 
-    public ArrayList getAllEdges(){
-        return (ArrayList) edgeDao.selectAll();
+    public List<Edge> getAllEdges() {
+        return edgeDao.selectAll();
     }
 
     public Edge getEdgeById(long recordId){
@@ -143,11 +138,7 @@ public class EntityManagerService {
 
     public boolean edgeExists(Edge edge){
         List<Edge> edges =  edgeDao.edgeExists(edge);
-        if(edges.isEmpty()){
-            return false;
-        } else{
-            return true;
-        }
+        return !edges.isEmpty();
     }
 
     public Traffic saveTraffic(Traffic traffic){
@@ -165,8 +156,8 @@ public class EntityManagerService {
         return true;
     }
 
-    public ArrayList getAllTraffics(){
-        return (ArrayList) trafficDao.selectAll();
+    public List<Traffic> getAllTraffics() {
+        return trafficDao.selectAll();
     }
 
     public Traffic getTrafficById(String routeId){
@@ -179,10 +170,6 @@ public class EntityManagerService {
 
     public boolean trafficExists(Traffic traffic){
         List<Traffic> traffics =  trafficDao.trafficExists(traffic);
-        if(traffics.isEmpty()){
-            return false;
-        } else{
-            return true;
-        }
+        return !traffics.isEmpty();
     }
 }

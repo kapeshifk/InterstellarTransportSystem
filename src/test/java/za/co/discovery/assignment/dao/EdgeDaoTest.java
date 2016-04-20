@@ -44,7 +44,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void verifyThatSaveEdgeIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge edge = new Edge(1, "2", "SAVE A", "SAVE B", 2f);
@@ -62,7 +62,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void verifyThatUpdateEdgeIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge edge = new Edge(1, "2", "UPDATE A", "UPDATE B", 20f);
@@ -84,7 +84,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void verifyThatDeleteEdgeIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge e1 = new Edge(2, "30", "DELETE A", "DELETE B", 0.17f);
@@ -106,7 +106,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testSelectUnique() {
+    public void verifyThatSelectUniqueEdgeIsCorrect() {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge edge = new Edge(8, "5", "UNIQUE A", "UNIQUE B", 0.5f);
@@ -124,7 +124,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testSelectAllByEdgeId() {
+    public void verifyThatSelectAllEdgesByIdIsCorrect() {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge e1 = new Edge(2, "30", "EDGE K", "EDGE F", 0.17f);
@@ -145,7 +145,7 @@ public class EdgeDaoTest {
     }
 
     @Test
-    public void testSelectAll() {
+    public void verifyThatSelectAllEdgesIsCorrect() {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Edge e1 = new Edge(2, "30", "ALL K", "ALL F", 0.17f);
@@ -161,6 +161,46 @@ public class EdgeDaoTest {
 
         //Verify
         assertThat(persistedEdge, sameBeanAs(expectedEdges));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
+    }
+
+    @Test
+    public void verifyThatSelectEdgeMaxRecordIsCorrect() {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Edge e1 = new Edge(1, "30", "ALL K", "ALL F", 0.17f);
+        Edge e2 = new Edge(2, "19", "ALL C", "ALL D", 0.19f);
+        session.save(e1);
+        session.save(e2);
+        long expectedMax = 2;
+
+        //Test
+        long returnMax = edgeDao.selectMaxRecordId();
+
+        //Verify
+        assertThat(returnMax, sameBeanAs(expectedMax));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
+    }
+
+    @Test
+    public void verifyThatEdgeExistsSelectionIsCorrect() {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Edge e1 = new Edge(1, "1", "A", "B", 0.17f);
+        Edge e2 = new Edge(2, "2", "A", "C", 0.19f);
+        session.save(e1);
+        session.save(e2);
+
+        Edge edgeToCommit = new Edge(3, "3", "A", "C", 3.0f);
+        List<Edge> expectedEdges = new ArrayList<>();
+        expectedEdges.add(e2);
+
+        //Test
+        List<Edge> returnedEdges = edgeDao.edgeExists(edgeToCommit);
+        //Verify
+        assertThat(returnedEdges, sameBeanAs(expectedEdges));
         //Rollback for testing purpose
         session.getTransaction().rollback();
     }

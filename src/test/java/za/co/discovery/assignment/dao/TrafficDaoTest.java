@@ -39,7 +39,7 @@ public class TrafficDaoTest {
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void verifyThatSaveTrafficIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Traffic traffic = new Traffic("1", "A", "B", 4f);
@@ -58,7 +58,7 @@ public class TrafficDaoTest {
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void verifyThatUpdateTrafficIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Traffic traffic = new Traffic("1", "A", "B", 4f);
@@ -82,7 +82,7 @@ public class TrafficDaoTest {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void verifyThatDeleteTrafficIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Traffic traffic1 = new Traffic("1", "A", "B", 4f);
@@ -105,7 +105,7 @@ public class TrafficDaoTest {
     }
 
     @Test
-    public void selectUnique() throws Exception {
+    public void verifyThatSelectUniqueTrafficIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Traffic traffic = new Traffic("100", "A", "B", 4f);
@@ -123,7 +123,7 @@ public class TrafficDaoTest {
     }
 
     @Test
-    public void selectAll() throws Exception {
+    public void verifyThatSelecteAllTrafficsIsCorrect() throws Exception {
         //Set
         Session session = sessionFactory.getCurrentSession();
         Traffic traffic1 = new Traffic("1", "A", "B", 4f);
@@ -145,6 +145,46 @@ public class TrafficDaoTest {
 
         //Verify
         assertThat(persistedTraffics, sameBeanAs(expectedTraffics));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
+    }
+
+    @Test
+    public void verifyThatSelectEdgeMaxRecordIsCorrect() {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Traffic traffic1 = new Traffic("1", "A", "B", 4f);
+        Traffic traffic2 = new Traffic("2", "C", "D", 4f);
+        session.save(traffic1);
+        session.save(traffic2);
+        long expectedMax = 2;
+
+        //Test
+        long returnMax = trafficDao.selectMaxRecordId();
+
+        //Verify
+        assertThat(returnMax, sameBeanAs(expectedMax));
+        //Rollback for testing purpose
+        session.getTransaction().rollback();
+    }
+
+    @Test
+    public void verifyThatEdgeExistsSelectionIsCorrect() {
+        //Set
+        Session session = sessionFactory.getCurrentSession();
+        Traffic traffic1 = new Traffic("1", "A", "B", 4f);
+        Traffic traffic2 = new Traffic("2", "C", "D", 4f);
+        session.save(traffic1);
+        session.save(traffic2);
+
+        Traffic trafficToCommit = new Traffic("3", "A", "B", 1.9f);
+        List<Traffic> expectedTraffics = new ArrayList<>();
+        expectedTraffics.add(traffic1);
+
+        //Test
+        List<Traffic> returnedEdges = trafficDao.trafficExists(trafficToCommit);
+        //Verify
+        assertThat(returnedEdges, sameBeanAs(expectedTraffics));
         //Rollback for testing purpose
         session.getTransaction().rollback();
     }

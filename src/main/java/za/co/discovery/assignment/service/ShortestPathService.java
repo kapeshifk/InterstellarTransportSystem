@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import za.co.discovery.assignment.entity.Edge;
 import za.co.discovery.assignment.entity.Vertex;
 import za.co.discovery.assignment.helper.Graph;
+import za.co.discovery.assignment.model.ShortestPathModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

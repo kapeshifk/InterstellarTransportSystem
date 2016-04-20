@@ -18,8 +18,8 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
  * Created by Kapeshi.Kongolo on 2016/04/13.
  */
 public class XLSXHandlerTest {
-    private XLSXHandler xlsxHandler;
     private static final String EXCEL_FILENAME = "/test.xlsx";
+    private XLSXHandler xlsxHandler;
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +29,7 @@ public class XLSXHandlerTest {
     }
 
     @Test
-    public void testReadVertexes() throws Exception {
+    public void verifyThatReadingVerticesFromFileIsCorrect() throws Exception {
         //Set
         Vertex vertex1 = new Vertex("A", "Earth");
         Vertex vertex2 = new Vertex("B", "Moon");
@@ -52,7 +52,7 @@ public class XLSXHandlerTest {
     }
 
     @Test
-    public void testReadEdges() throws Exception {
+    public void verifyThatReadingEdgesFromFileIsCorrect() throws Exception {
         //Set
         Edge edge1 = new Edge(1, "1", "A", "B", 0.44f);
         Edge edge2 = new Edge(2, "2", "A", "C", 1.89f);
@@ -75,7 +75,7 @@ public class XLSXHandlerTest {
     }
 
     @Test
-    public void readTraffics() throws Exception {
+    public void verifyThatReadingTrafficsFromFileIsCorrect() throws Exception {
         //Set
         Traffic traffic1 = new Traffic("1", "A", "B", 0.30f);
         Traffic traffic2 = new Traffic("2", "A", "C", 0.90f);

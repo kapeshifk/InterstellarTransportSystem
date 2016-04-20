@@ -35,6 +35,15 @@ public class Edge implements Serializable {
         this.distance = distance;
     }
 
+    public Edge(long recordId, String edgeId, String source, String destination, float distance, float timeDelay) {
+        this.recordId = recordId;
+        this.edgeId = edgeId;
+        this.source = source;
+        this.destination = destination;
+        this.distance = distance;
+        this.timeDelay = timeDelay;
+    }
+
     public long getRecordId() {
         return recordId;
     }
