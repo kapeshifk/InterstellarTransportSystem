@@ -47,14 +47,17 @@ public class ShortestPathRepository {
     public String getShortestPath(String name) {
         StringBuilder path = new StringBuilder();
         ShortestPathService sp = new ShortestPathService(graph);
+        Vertex source = graph.getVertexes().get(0);
         Vertex destination = entityManagerService.getVertexByName(name);
         if (destination == null) {
             destination = entityManagerService.getVertexById(name);
             if (destination == null) {
-                return "The Planet requested does not exist.";
+                return "Planet " + name + " does not exist in the Interstellar Transport System.";
             }
+        } else if (source != null && destination != null && source.getVertexId().equals(destination.getVertexId())) {
+            return "You are already on planet " + source.getName() + ".";
         }
-        Vertex source = graph.getVertexes().get(0);
+
         sp.run(source);
         LinkedList<Vertex> paths = sp.getPath(destination);
         if (paths != null) {
@@ -62,6 +65,9 @@ public class ShortestPathRepository {
                 path.append(v.getName() + " (" + v.getVertexId() + ")");
                 path.append("\t");
             }
+        } else {
+            path.append("There is no path to " + destination.getName());
+            path.append(".");
         }
 
         return path.toString();
