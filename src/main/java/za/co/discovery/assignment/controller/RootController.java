@@ -27,6 +27,7 @@ public class RootController {
 
     private static final String PATH_NOT_AVAILABLE = "Unavailable.";
     private static final String PATH_NOT_NEEDED = "Not needed. You are already on planet ";
+    private static final String NO_PLANET_FOUND = "No planet found.";
     private EntityManagerService entityManagerService;
     private ShortestPathService shortestPathService;
 
@@ -304,6 +305,10 @@ public class RootController {
     public String shortestForm(Model model) {
         ShortestPathModel pathModel = new ShortestPathModel();
         List<Vertex> allVertices = entityManagerService.getAllVertices();
+        if (allVertices == null || allVertices.isEmpty()) {
+            model.addAttribute("validationMessage", NO_PLANET_FOUND);
+            return "validation";
+        }
         Vertex origin = allVertices.get(0);
         pathModel.setVertexName(origin.getName());
         model.addAttribute("shortest", pathModel);

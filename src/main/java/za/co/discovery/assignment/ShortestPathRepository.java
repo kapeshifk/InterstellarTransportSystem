@@ -21,6 +21,10 @@ import java.util.LinkedList;
 @Component
 public class ShortestPathRepository {
 
+    private static final String PATH_NOT_AVAILABLE = "There is no path to ";
+    private static final String PATH_NOT_NEEDED = "Not needed. You are already on planet ";
+    private static final String NO_PLANET_FOUND = "No planet found.";
+    private static final String PLANET_DOES_NOT_EXIST = " does not exist in the Interstellar Transport System.";
     protected PlatformTransactionManager platformTransactionManager;
     private Graph graph;
     private EntityManagerService entityManagerService;
@@ -39,23 +43,27 @@ public class ShortestPathRepository {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 entityManagerService.persistGraph();
-                graph = entityManagerService.selectGraph();
             }
         });
     }
 
     public String getShortestPath(String name) {
         StringBuilder path = new StringBuilder();
+        graph = entityManagerService.selectGraph();
         ShortestPathService sp = new ShortestPathService(graph);
+
+        if (graph == null || graph.getVertexes() == null || graph.getVertexes().isEmpty()) {
+            return NO_PLANET_FOUND;
+        }
         Vertex source = graph.getVertexes().get(0);
         Vertex destination = entityManagerService.getVertexByName(name);
         if (destination == null) {
             destination = entityManagerService.getVertexById(name);
             if (destination == null) {
-                return "Planet " + name + " does not exist in the Interstellar Transport System.";
+                return name + PLANET_DOES_NOT_EXIST;
             }
         } else if (source != null && destination != null && source.getVertexId().equals(destination.getVertexId())) {
-            return "You are already on planet " + source.getName() + ".";
+            return PATH_NOT_NEEDED + source.getName() + ".";
         }
 
         sp.run(source);
@@ -66,7 +74,7 @@ public class ShortestPathRepository {
                 path.append("\t");
             }
         } else {
-            path.append("There is no path to " + destination.getName());
+            path.append(PATH_NOT_AVAILABLE + destination.getName());
             path.append(".");
         }
 
