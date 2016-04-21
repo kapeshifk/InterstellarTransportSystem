@@ -24,7 +24,6 @@ public class ShortestPathService {
     }
 
     public ShortestPathService(Graph graph) {
-        //initialize vertices and edges
         this.vertices = new ArrayList<>(graph.getVertexes());
         if (graph.isTrafficAllowed()) {
             graph.processTraffics();
