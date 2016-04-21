@@ -28,7 +28,7 @@ public class RootController {
     private static final String PATH_NOT_AVAILABLE = "Unavailable.";
     private static final String PATH_NOT_NEEDED = "Not needed. You are already on planet ";
     private static final String NO_PLANET_FOUND = "No planet found.";
-    private static final String DUPLICATE_ROUTE = "No planet found.";
+    private static final String DUPLICATE_ROUTE = "You cannot link a route to itself.";
     private static final String DUPLICATE_TRAFFIC = "You cannot add traffic on the same route origin and destination.";
     private static final String INVALID_CODE = "Failed to find the validation code. Please start again.";
     private EntityManagerService entityManagerService;
@@ -188,10 +188,10 @@ public class RootController {
                     message = "The route from " + sourceName + " (" + pathModel.getSourceVertex() + ") to " + sourceDestination + "(" + pathModel.getDestinationVertex() + ") exists already.";
                     break;
                 case ROUTE_TO_SELF:
-                    message = "You cannot link a route to itself.";
+                    message = DUPLICATE_ROUTE;
                     break;
                 default:
-                    message = "Failed to find the validation code. Please start again.";
+                    message = INVALID_CODE;
                     break;
             }
         }
