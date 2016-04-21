@@ -2,3 +2,6 @@ target
 *.iml
 .idea
 derby.log
+InterstellarTransportSystem
+# Package Files #
+*.jar
